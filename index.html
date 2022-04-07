@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Ejemplo 1</title>
+    <title>Alfredo Ezequiel Giussani</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -16,10 +16,40 @@
 <div class="container-fluid mt-3" id="app">
     <input type="text" class="form-control" v-model="criterioDeBusqueda"
         placeholder="Ingresar un criterio de busqueda...">
+    <input type="text" class="form-control mt-2" v-model="criterioDeBusquedaNomApe"
+        placeholder="Ingresar busqueda segun nombre + apellido...">
+    <input type="number" class="form-control mt-2" v-model="criterioDeBusquedaDni"
+        placeholder="Ingresar busqueda segun DNI...">
     <br>
     <div class="card-deck m-0">
         <div class="row">
             <div class="col" v-for="persona in personasFiltradas">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">{{getNombreCompleto(persona)}}</h5>
+                        <p class="card-text">dni {{persona.dni}}</p>
+                        <a href="#" class="card-link">{{persona.correo}}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-deck m-0">
+        <div class="row">
+            <div class="col" v-for="persona in personasFiltradasXNomApe">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">{{getNombreCompleto(persona)}}</h5>
+                        <p class="card-text">dni {{persona.dni}}</p>
+                        <a href="#" class="card-link">{{persona.correo}}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-deck m-0">
+        <div class="row">
+            <div class="col" v-for="persona in personasFiltradasXDni">
                 <div class="card mb-3">
                     <div class="card-body">
                         <h5 class="card-title">{{getNombreCompleto(persona)}}</h5>
@@ -40,6 +70,8 @@
         el: '#app',
         data: {
             criterioDeBusqueda: '',
+            criterioDeBusquedaNomApe: '',
+            criterioDeBusquedaDni: '',
             //Aquí, en este array es donde tienen que agregar su información
             personas: [
                 {
@@ -49,10 +81,10 @@
                     dni: "20442873"
                 },
                 {
-                    nombre: "...",
-                    apellido: "...",
-                    correo: "...",
-                    dni: "..."
+                    nombre: "Ezequiel",
+                    apellido: "Giussani",
+                    correo: "exe_cien@hotmail.com",
+                    dni: "38886611"
                 },
             ]
 
@@ -63,7 +95,22 @@
                     let registroCompleto = `${persona.nombre} ${persona.apellido} ${persona.dni} ${persona.correo}`
                     return registroCompleto.toLowerCase().includes(this.criterioDeBusqueda.toLowerCase())
                 });
+            },
+
+            personasFiltradasXNomApe() {
+                return this.personas.filter((persona) => {
+                    let registroNomApe = `${persona.nombre} ${persona.apellido}`
+                    return registroNomApe.toLowerCase().includes(this.criterioDeBusquedaNomApe.toLowerCase())
+                })
+            },
+
+            personasFiltradasXDni() {
+                return this.personas.filter((persona) => {
+                    let registroXDni = `${persona.dni}`
+                    return registroXDni.includes(this.criterioDeBusquedaDni)
+                })
             }
+
         },
         methods: {
             getNombreCompleto(persona) {
